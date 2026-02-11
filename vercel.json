@@ -1,0 +1,19 @@
+{
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_DEPLOYMENT_ID": "@now"
+  },
+  "headers": [
+    {
+      "source": "/portfolio",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ]
+}
