@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { TrendingUp, Bell, Plus } from "lucide-react"
+import { TrendingUp, Bell, Plus, Settings } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import MatrixRain from "@/components/MatrixRain"
 import ServiceHero from "@/components/ServiceHero"
 import ContactButtons from "@/components/ContactButtons"
@@ -67,6 +68,21 @@ export default function SocialMediaBoosting() {
       <MatrixRain />
 
       <div className="relative z-10">
+        {/* Admin Access Link */}
+        <div className="fixed top-4 right-4 z-50">
+          <Link href="/admin?tab=services">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-hacker-green/20 border border-hacker-green text-hacker-green-bright hover:bg-hacker-green/30 transition-all text-sm"
+              title="Admin Panel - Services Management"
+            >
+              <Settings className="w-4 h-4" />
+              <span className="hidden sm:inline">Admin</span>
+            </motion.button>
+          </Link>
+        </div>
+
         <ServiceHero
           title="SOCIAL MEDIA BOOSTING"
           subtitle="// Select Your Network"

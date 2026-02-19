@@ -30,6 +30,7 @@ import MatrixRain from "@/components/MatrixRain"
 import MobileMenu from "@/components/MobileMenu"
 import BackToTop from "@/components/BackToTop"
 import AdminServicesPanel from "@/components/AdminServicesPanel"
+import AdminSidebar from "@/components/AdminSidebar"
 
 interface Order {
   id: number
@@ -248,67 +249,56 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative flex lg:flex-row flex-col">
       <MobileMenu />
       <BackToTop />
       <MatrixRain />
 
-      <div className="relative z-10 container mx-auto px-4 py-16">
+      {/* Sidebar */}
+      <AdminSidebar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab}
+        onLogout={() => setIsAuthenticated(false)}
+      />
+
+      <div className="flex-1 relative z-10 w-full lg:pt-0 pt-16">
+        <div className="container mx-auto px-4 py-8 lg:py-16">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between mb-8"
+            className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
           >
             <div>
-              <h1 className="text-6xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                Admin Dashboard
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                Dashboard
               </h1>
-              <p className="text-slate-400 flex items-center gap-2 text-lg">
-                <Activity className="w-5 h-5 text-emerald-400" />
-                Real-time Order Management System
+              <p className="text-slate-400 flex items-center gap-2 text-sm md:text-base">
+                <Activity className="w-4 w-4 md:w-5 md:h-5 text-emerald-400" />
+                Real-time Order Management
               </p>
             </div>
-            <div className="flex flex-wrap gap-3 items-center">
-              <Link href="/admin/valentine-tokens">
+            <div className="flex flex-wrap gap-2 md:gap-3 items-center w-full md:w-auto">
+              <Link href="/admin/services">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-400 font-bold hover:bg-rose-500/30 transition-all"
+                  className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-3 rounded-lg md:rounded-xl text-xs md:text-sm bg-cyan-500/20 border border-cyan-500/50 text-cyan-400 font-bold hover:bg-cyan-500/30 transition-all"
                 >
-                  <Heart className="w-4 h-4" />
-                  Valentine Tokens
-                </motion.button>
-              </Link>
-              <Link href="/admin/valentine-validation">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-pink-500/20 border border-pink-500/50 text-pink-400 font-bold hover:bg-pink-500/30 transition-all"
-                >
-                  <LinkIcon className="w-4 h-4" />
-                  Validation
+                  <Package className="w-4 h-4" />
+                  <span className="hidden sm:inline">Services</span>
                 </motion.button>
               </Link>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowPasswordChange(!showPasswordChange)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl border font-bold transition-all ${showPasswordChange ? "bg-amber-500/30 border-amber-500/60 text-amber-300" : "bg-amber-500/20 border-amber-500/50 text-amber-400 hover:bg-amber-500/30"}`}
+                className={`flex items-center gap-2 px-3 md:px-5 py-2 md:py-3 rounded-lg md:rounded-xl text-xs md:text-sm border font-bold transition-all ${showPasswordChange ? "bg-amber-500/30 border-amber-500/60 text-amber-300" : "bg-amber-500/20 border-amber-500/50 text-amber-400 hover:bg-amber-500/30"}`}
               >
                 <Settings className="w-4 h-4" />
-                Settings
+                <span className="hidden sm:inline">Settings</span>
               </motion.button>
-              <Link href="/">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all"
-                >
-                  Back to Home
-                </motion.button>
-              </Link>
             </div>
           </motion.div>
 
@@ -754,6 +744,7 @@ export default function AdminDashboard() {
             <p className="text-slate-400">© anonymiketech_inc@{getCurrentYear()} - Admin Dashboard v2.0</p>
           </div>
         </motion.footer>
+        </div>
       </div>
     </div>
   )
