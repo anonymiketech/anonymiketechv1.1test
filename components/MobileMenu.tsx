@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Shield, Code, Bot, TrendingUp, Home, User, Mail, Heart } from "lucide-react"
+import { Menu, X, Shield, Code, Bot, TrendingUp, Home, User, Mail, Heart, Settings } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -121,6 +121,11 @@ export default function MobileMenu({ showAfterIntro = true }: MobileMenuProps) {
       name: "Contact",
       path: "/contact",
       icon: <Mail className="w-5 h-5" />,
+    },
+    {
+      name: "Admin Panel",
+      path: "/admin",
+      icon: <Settings className="w-5 h-5" />,
     },
   ]
 
