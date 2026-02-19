@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { Sphere, Points } from "@react-three/drei"
 import * as THREE from "three"
 
 function Globe() {
@@ -18,28 +17,9 @@ function Globe() {
     }
   })
 
-  useEffect(() => {
-    // Create particle geometry for glowing effect
-    const particleGeometry = new THREE.BufferGeometry()
-    const particleCount = 800
-    const positions = new Float32Array(particleCount * 3)
-
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      const radius = 2.5
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.random() * Math.PI
-
-      positions[i] = radius * Math.sin(phi) * Math.cos(theta)
-      positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta)
-      positions[i + 2] = radius * Math.cos(phi)
-    }
-
-    particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
-  }, [])
-
   return (
     <group ref={globeRef}>
-      {/* Wireframe globe */}
+      {/* Wireframe globe - main */}
       <mesh>
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial
@@ -50,31 +30,47 @@ function Globe() {
         />
       </mesh>
 
-      {/* Solid globe with texture */}
+      {/* Solid globe base */}
       <mesh>
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial
-          map={null}
           color="#001a33"
           emissive="#003d66"
           emissiveIntensity={0.4}
         />
       </mesh>
 
-      {/* Glowing particles */}
-      <Points
-        ref={particlesRef}
-        positions={new Float32Array(Array.from({ length: 800 * 3 }, () => {
-          const radius = 2.5
-          const theta = Math.random() * Math.PI * 2
-          const phi = Math.random() * Math.PI
-          return radius * Math.sin(phi) * Math.cos(theta)
-        }))}
-      >
-        <pointsMaterial size={0.02} color="#ff00ff" sizeAttenuation={true} />
-      </Points>
+      {/* Glowing particles around globe */}
+      <mesh ref={particlesRef}>
+        <bufferGeometry>
+          {(() => {
+            const particleCount = 800
+            const positions = new Float32Array(particleCount * 3)
 
-      {/* Glow effect layers */}
+            for (let i = 0; i < particleCount * 3; i += 3) {
+              const radius = 2.5
+              const theta = Math.random() * Math.PI * 2
+              const phi = Math.random() * Math.PI
+
+              positions[i] = radius * Math.sin(phi) * Math.cos(theta)
+              positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta)
+              positions[i + 2] = radius * Math.cos(phi)
+            }
+
+            return (
+              <bufferAttribute
+                attach="attributes-position"
+                count={particleCount}
+                array={positions}
+                itemSize={3}
+              />
+            )
+          })()}
+        </bufferGeometry>
+        <pointsMaterial size={0.03} color="#ff00ff" sizeAttenuation={true} />
+      </mesh>
+
+      {/* Glow effect layer 1 - Magenta */}
       <mesh>
         <sphereGeometry args={[2.1, 32, 32]} />
         <meshPhongMaterial
@@ -86,6 +82,7 @@ function Globe() {
         />
       </mesh>
 
+      {/* Glow effect layer 2 - Cyan */}
       <mesh>
         <sphereGeometry args={[2.3, 32, 32]} />
         <meshPhongMaterial
@@ -97,40 +94,63 @@ function Globe() {
         />
       </mesh>
 
-      {/* Orbital rings */}
+      {/* Orbital ring 1 - Equatorial */}
       <line>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={64}
-            array={new Float32Array(
-              Array.from({ length: 64 }, (_, i) => {
-                const angle = (i / 64) * Math.PI * 2
-                return [Math.cos(angle) * 2.5, 0, Math.sin(angle) * 2.5]
-              }).flat()
-            )}
-            itemSize={3}
-          />
+          {(() => {
+            const points = []
+            for (let i = 0; i <= 64; i++) {
+              const angle = (i / 64) * Math.PI * 2
+              points.push(Math.cos(angle) * 2.5, 0, Math.sin(angle) * 2.5)
+            }
+            return (
+              <bufferAttribute
+                attach="attributes-position"
+                count={65}
+                array={new Float32Array(points)}
+                itemSize={3}
+              />
+            )
+          })()}
         </bufferGeometry>
-        <lineBasicMaterial color="#00d4ff" linewidth={1} transparent opacity={0.4} />
+        <lineBasicMaterial color="#00d4ff" transparent opacity={0.4} linewidth={1} />
       </line>
 
+      {/* Orbital ring 2 - Vertical */}
       <line>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={64}
-            array={new Float32Array(
-              Array.from({ length: 64 }, (_, i) => {
-                const angle = (i / 64) * Math.PI * 2
-                return [Math.cos(angle) * 2.5, Math.sin(angle) * 2.5, 0]
-              }).flat()
-            )}
-            itemSize={3}
-          />
+          {(() => {
+            const points = []
+            for (let i = 0; i <= 64; i++) {
+              const angle = (i / 64) * Math.PI * 2
+              points.push(Math.cos(angle) * 2.5, Math.sin(angle) * 2.5, 0)
+            }
+            return (
+              <bufferAttribute
+                attach="attributes-position"
+                count={65}
+                array={new Float32Array(points)}
+                itemSize={3}
+              />
+            )
+          })()}
         </bufferGeometry>
-        <lineBasicMaterial color="#ff00ff" linewidth={1} transparent opacity={0.3} />
+        <lineBasicMaterial color="#ff00ff" transparent opacity={0.3} linewidth={1} />
       </line>
+
+      {/* Connection nodes */}
+      <mesh position={[2.5, 0, 0]}>
+        <sphereGeometry args={[0.1, 16, 16]} />
+        <meshPhongMaterial color="#00d4ff" emissive="#00d4ff" emissiveIntensity={0.8} />
+      </mesh>
+      <mesh position={[0, 2.5, 0]}>
+        <sphereGeometry args={[0.1, 16, 16]} />
+        <meshPhongMaterial color="#ff00ff" emissive="#ff00ff" emissiveIntensity={0.8} />
+      </mesh>
+      <mesh position={[-1.8, -1.8, 0]}>
+        <sphereGeometry args={[0.08, 16, 16]} />
+        <meshPhongMaterial color="#00d4ff" emissive="#00d4ff" emissiveIntensity={0.6} />
+      </mesh>
     </group>
   )
 }
