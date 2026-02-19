@@ -10,6 +10,7 @@ import MobileMenu from "@/components/MobileMenu"
 import BackToTop from "@/components/BackToTop"
 import SocialMediaNetworkList, { type NetworkItem } from "@/components/SocialMediaNetworkList"
 import YouTubeServices from "@/components/YouTubeServices"
+import DynamicSocialServices from "@/components/DynamicSocialServices"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { getCurrentYear } from "@/utils/getCurrentYear"
@@ -222,10 +223,7 @@ export default function SocialMediaBoosting() {
               </motion.div>
             ) : (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-                <h2 className="text-2xl md:text-3xl font-tech font-bold text-hacker-green-bright mb-8 glow-text">
-                  Select network
-                </h2>
-                <SocialMediaNetworkList networks={filteredNetworks} onNetworkSelect={handleNetworkSelect} />
+                <DynamicSocialServices />
               </motion.div>
             )}
           </div>

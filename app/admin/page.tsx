@@ -29,6 +29,7 @@ import Link from "next/link"
 import MatrixRain from "@/components/MatrixRain"
 import MobileMenu from "@/components/MobileMenu"
 import BackToTop from "@/components/BackToTop"
+import AdminServicesPanel from "@/components/AdminServicesPanel"
 
 interface Order {
   id: number
@@ -61,7 +62,7 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
-  const [activeTab, setActiveTab] = useState<"all" | "website" | "social-media">("all")
+  const [activeTab, setActiveTab] = useState<"all" | "website" | "social-media" | "services">("all")
   // Password change state
   const [showPasswordChange, setShowPasswordChange] = useState(false)
   const [currentPw, setCurrentPw] = useState("")
@@ -388,6 +389,7 @@ export default function AdminDashboard() {
               { id: "all", label: "All Orders", icon: BarChart3 },
               { id: "website", label: "Website Development", icon: Globe },
               { id: "social-media", label: "Social Media Boosting", icon: Share2 },
+              { id: "services", label: "Services Management", icon: Package },
             ].map((tab) => {
               const Icon = tab.icon
               return (
@@ -726,6 +728,22 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Services Management Tab */}
+        <AnimatePresence mode="wait">
+          {activeTab === "services" && (
+            <motion.div
+              key="services"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-slate-900/50 border border-slate-700 rounded-2xl p-8 backdrop-blur-sm mt-8"
+            >
+              <AdminServicesPanel />
             </motion.div>
           )}
         </AnimatePresence>
