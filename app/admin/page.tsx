@@ -31,6 +31,7 @@ import MobileMenu from "@/components/MobileMenu"
 import BackToTop from "@/components/BackToTop"
 import AdminServicesPanel from "@/components/AdminServicesPanel"
 import AdminSidebar from "@/components/AdminSidebar"
+import AdminImageUpload from "@/components/AdminImageUpload"
 
 interface Order {
   id: number
@@ -311,16 +312,23 @@ export default function AdminDashboard() {
                 exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                 className="overflow-hidden"
               >
-                <div className="bg-slate-900/80 border-2 border-amber-500/30 rounded-2xl p-6 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                      <Lock className="w-5 h-5 text-amber-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white">Change Admin Password</h3>
-                      <p className="text-slate-400 text-sm">This will update the password for all admin pages</p>
-                    </div>
+                <div className="bg-slate-900/80 border-2 border-amber-500/30 rounded-2xl p-6 backdrop-blur-sm space-y-8">
+                  {/* Admin Image Upload Section */}
+                  <div className="pb-6 border-b border-slate-700">
+                    <AdminImageUpload />
                   </div>
+
+                  {/* Password Change Section */}
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                        <Lock className="w-5 h-5 text-amber-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white">Change Admin Password</h3>
+                        <p className="text-slate-400 text-sm">This will update the password for all admin pages</p>
+                      </div>
+                    </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                       <label className="block text-slate-400 text-sm mb-1">Current Password</label>
@@ -368,6 +376,7 @@ export default function AdminDashboard() {
                         {pwChangeMsg.text}
                       </p>
                     )}
+                  </div>
                   </div>
                 </div>
               </motion.div>
