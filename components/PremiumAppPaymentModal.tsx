@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Phone, AlertCircle, CheckCircle, Loader2 } from "lucide-react"
+import { X, Phone, AlertCircle, CheckCircle, Loader2, MessageCircle } from "lucide-react"
 
 interface PremiumAppPaymentModalProps {
   isOpen: boolean
@@ -178,13 +178,28 @@ export default function PremiumAppPaymentModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <motion.div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="relative w-full max-w-md rounded-lg border border-green-500/30 bg-slate-900 p-6 shadow-2xl"
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="relative w-full max-w-md rounded-lg border border-green-500/50 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-2xl overflow-hidden"
           >
+            {/* Animated glow effect */}
+            <motion.div
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="absolute inset-0 bg-gradient-to-r from-green-500/10 via-transparent to-emerald-500/10 rounded-lg pointer-events-none"
+            />
+
+            {/* Content wrapper */}
+            <div className="relative z-10">
             {/* Close button */}
             <button
               onClick={handleClose}
@@ -259,23 +274,50 @@ export default function PremiumAppPaymentModal({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="space-y-4 text-center"
+                className="space-y-6 text-center"
               >
-                <div className="flex justify-center">
+                <div className="flex justify-center py-4">
                   <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+                    transition={{ 
+                      rotate: { duration: 2, repeat: Infinity, ease: "linear" },
+                      scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                    }}
                   >
-                    <Loader2 className="text-green-500" size={48} />
+                    <div className="relative">
+                      <motion.div
+                        animate={{ opacity: [0.3, 1, 0.3] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 bg-green-500 rounded-full blur-xl"
+                      />
+                      <Loader2 className="text-green-500 relative" size={56} />
+                    </div>
                   </motion.div>
                 </div>
-                <div>
-                  <p className="text-green-400 font-mono mb-2">
+                <div className="space-y-3">
+                  <motion.p 
+                    className="text-green-400 font-mono text-lg font-bold"
+                    animate={{ opacity: [0.8, 1, 0.8] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
                     Waiting for payment confirmation...
-                  </p>
+                  </motion.p>
                   <p className="text-sm text-slate-400">
                     Please complete the M-Pesa STK prompt on your phone
                   </p>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-xs text-slate-500 pt-2"
+                  >
+                    <motion.div
+                      animate={{ y: [0, 2, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      ↓ Do not close this window ↓
+                    </motion.div>
+                  </motion.div>
                 </div>
               </motion.div>
             )}
@@ -314,55 +356,130 @@ export default function PremiumAppPaymentModal({
                   )}
                 </div>
 
-                <button
-                  onClick={handleValidateTransaction}
-                  disabled={loading}
-                  className="w-full rounded border border-green-500 bg-green-500/10 px-4 py-2 font-mono text-green-400 hover:bg-green-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin" />
-                      Validating...
-                    </>
-                  ) : (
-                    "Validate Transaction"
-                  )}
-                </button>
+                <div className="space-y-3">
+                  <button
+                    onClick={handleValidateTransaction}
+                    disabled={loading}
+                    className="w-full rounded border border-green-500 bg-green-500/10 px-4 py-2 font-mono text-green-400 hover:bg-green-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        Validating...
+                      </>
+                    ) : (
+                      "Validate Transaction"
+                    )}
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      const whatsappMessage = `Hi, I just made a payment for ${appName}. Here is my transaction code: ${transactionCode || "Please enter your code"}\n\nAmount: KSH ${price}`
+                      const whatsappUrl = `https://wa.me/254782829321?text=${encodeURIComponent(whatsappMessage)}`
+                      window.open(whatsappUrl, "_blank")
+                    }}
+                    className="w-full rounded border border-blue-500 bg-blue-500/10 px-4 py-2 font-mono text-blue-400 hover:bg-blue-500/20 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle size={16} />
+                    Share on WhatsApp
+                  </button>
+                </div>
               </motion.div>
             )}
 
             {/* Success Step */}
             {step === "success" && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="space-y-4 text-center"
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6 text-center"
               >
-                <div className="flex justify-center">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 100 }}
-                  >
-                    <CheckCircle className="text-green-500" size={64} />
-                  </motion.div>
-                </div>
-                <div>
-                  <p className="text-lg font-bold text-green-400 mb-2">
-                    Purchase Successful!
-                  </p>
-                  <p className="text-sm text-slate-400 mb-4">
-                    {appName} is now available for download
-                  </p>
+                {/* Confetti-like animation elements */}
+                <div className="absolute inset-0 pointer-events-none">
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 0 }}
+                      animate={{ opacity: [1, 0], y: [-20, -100] }}
+                      transition={{ duration: 2, delay: i * 0.1 }}
+                      className="absolute text-green-400 text-2xl"
+                      style={{ left: `${20 + i * 15}%` }}
+                    >
+                      ✓
+                    </motion.div>
+                  ))}
                 </div>
 
-                <button
-                  onClick={handleClose}
-                  className="w-full rounded border border-green-500 bg-green-500/10 px-4 py-2 font-mono text-green-400 hover:bg-green-500/20 transition-colors"
+                <div className="flex justify-center py-4">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 100, damping: 10 }}
+                  >
+                    <div className="relative">
+                      <motion.div
+                        animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 bg-green-500 rounded-full blur-2xl"
+                      />
+                      <CheckCircle className="text-green-400 relative" size={80} strokeWidth={1.5} />
+                    </div>
+                  </motion.div>
+                </div>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="space-y-3 relative z-10"
                 >
-                  Close
-                </button>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-2xl font-bold text-green-400 mb-2"
+                  >
+                    Purchase Successful!
+                  </motion.h3>
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-base text-slate-300 mb-3"
+                  >
+                    {appName} is now available for download
+                  </motion.p>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="rounded-lg bg-green-500/10 border border-green-500/30 p-3"
+                  >
+                    <p className="text-sm text-green-400 font-mono">
+                      Transaction Verified ✓
+                    </p>
+                  </motion.div>
+                </motion.div>
+
+                <motion.button
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  onClick={handleClose}
+                  className="w-full rounded border border-green-500 bg-gradient-to-r from-green-500/20 to-emerald-500/20 px-4 py-3 font-mono font-bold text-green-400 hover:from-green-500/30 hover:to-emerald-500/30 transition-all hover:shadow-lg hover:shadow-green-500/50"
+                >
+                  Download Now
+                </motion.button>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="text-xs text-slate-500"
+                >
+                  Check your email for download instructions
+                </motion.p>
               </motion.div>
             )}
 
@@ -393,8 +510,9 @@ export default function PremiumAppPaymentModal({
                 </button>
               </motion.div>
             )}
+            </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   )
