@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Settings } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import NewBadge from './NewBadge'
 
 export default function DesktopNavbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -62,6 +63,7 @@ export default function DesktopNavbar() {
     { href: '/social-media-boosting', label: 'Social Media' },
     { href: '/chatbots-ai', label: 'AI & Chatbots' },
     { href: '/internet-services', label: 'Internet Services' },
+    { href: '/premium-apps', label: 'Premium Apps' },
   ]
 
   return (
@@ -151,10 +153,11 @@ export default function DesktopNavbar() {
                         <Link key={service.href} href={service.href}>
                           <motion.div
                             whileHover={{ x: 5, backgroundColor: 'rgba(0, 255, 65, 0.1)' }}
-                            className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-md cursor-pointer transition-colors text-hacker-green-dim hover:text-hacker-green-bright font-tech text-xs sm:text-sm"
+                            className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-md cursor-pointer transition-colors text-hacker-green-dim hover:text-hacker-green-bright font-tech text-xs sm:text-sm flex items-center"
                             onClick={() => setOpenServices(false)}
                           >
                             {service.label}
+                            {service.label === 'Premium Apps' && <NewBadge />}
                           </motion.div>
                         </Link>
                       ))}
@@ -164,6 +167,18 @@ export default function DesktopNavbar() {
               </AnimatePresence>
             </div>
           </div>
+
+          {/* Admin Link */}
+          <Link href="/admin" className="flex-shrink-0">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="p-2 text-hacker-green-dim hover:text-hacker-green-bright transition-colors"
+              title="Admin Panel"
+            >
+              <Settings className="w-5 h-5" />
+            </motion.button>
+          </Link>
 
           {/* CTA Button */}
           <Link href="/contact" className="flex-shrink-0">

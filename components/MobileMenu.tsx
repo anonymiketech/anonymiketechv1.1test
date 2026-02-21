@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Shield, Code, Bot, TrendingUp, Home, User, Mail, Heart } from "lucide-react"
+import { Menu, X, Shield, Code, Bot, TrendingUp, Home, User, Mail, Heart, Settings, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { getAnimationDelay, getAnimationDuration } from "@/lib/animation-utils"
+import NewBadge from "./NewBadge"
 
 interface MobileMenuProps {
   showAfterIntro?: boolean
@@ -89,6 +90,11 @@ export default function MobileMenu({ showAfterIntro = true }: MobileMenuProps) {
       icon: <User className="w-5 h-5" />,
     },
     {
+      name: "Premium Apps",
+      path: "/premium-apps",
+      icon: <ShoppingCart className="w-5 h-5" />,
+    },
+    {
       name: "Internet Services",
       path: "/internet-services",
       icon: <Shield className="w-5 h-5" />,
@@ -121,6 +127,11 @@ export default function MobileMenu({ showAfterIntro = true }: MobileMenuProps) {
       name: "Contact",
       path: "/contact",
       icon: <Mail className="w-5 h-5" />,
+    },
+    {
+      name: "Admin Panel",
+      path: "/admin",
+      icon: <Settings className="w-5 h-5" />,
     },
   ]
 
@@ -230,7 +241,10 @@ export default function MobileMenu({ showAfterIntro = true }: MobileMenuProps) {
                         onClick={() => setIsOpen(false)}
                       >
                         <span className="flex-shrink-0">{item.icon}</span>
-                        <span className="flex-1">{item.name}</span>
+                        <span className="flex-1 flex items-center">
+                          {item.name}
+                          {item.name === "Premium Apps" && <NewBadge />}
+                        </span>
                       </Link>
                     </motion.div>
                   ))}
