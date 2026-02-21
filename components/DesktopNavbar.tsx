@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { ChevronDown, Settings } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import NewBadge from './NewBadge'
 
 export default function DesktopNavbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -152,10 +153,11 @@ export default function DesktopNavbar() {
                         <Link key={service.href} href={service.href}>
                           <motion.div
                             whileHover={{ x: 5, backgroundColor: 'rgba(0, 255, 65, 0.1)' }}
-                            className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-md cursor-pointer transition-colors text-hacker-green-dim hover:text-hacker-green-bright font-tech text-xs sm:text-sm"
+                            className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-md cursor-pointer transition-colors text-hacker-green-dim hover:text-hacker-green-bright font-tech text-xs sm:text-sm flex items-center"
                             onClick={() => setOpenServices(false)}
                           >
                             {service.label}
+                            {service.label === 'Premium Apps' && <NewBadge />}
                           </motion.div>
                         </Link>
                       ))}

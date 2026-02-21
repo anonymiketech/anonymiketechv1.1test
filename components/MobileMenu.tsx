@@ -7,6 +7,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { getAnimationDelay, getAnimationDuration } from "@/lib/animation-utils"
+import NewBadge from "./NewBadge"
 
 interface MobileMenuProps {
   showAfterIntro?: boolean
@@ -240,7 +241,10 @@ export default function MobileMenu({ showAfterIntro = true }: MobileMenuProps) {
                         onClick={() => setIsOpen(false)}
                       >
                         <span className="flex-shrink-0">{item.icon}</span>
-                        <span className="flex-1">{item.name}</span>
+                        <span className="flex-1 flex items-center">
+                          {item.name}
+                          {item.name === "Premium Apps" && <NewBadge />}
+                        </span>
                       </Link>
                     </motion.div>
                   ))}
