@@ -53,7 +53,6 @@ export default function DesktopNavbar() {
 
   const primaryLinks = [
     { href: '/portfolio', label: 'Portfolio' },
-    { href: '/premium-apps', label: 'Premium Apps' },
     ...(isValentineActive ? [{ href: '/valentine', label: 'Valentine' }] : []),
     { href: '/contact', label: 'Contact' },
   ]
@@ -63,6 +62,7 @@ export default function DesktopNavbar() {
     { href: '/social-media-boosting', label: 'Social Media' },
     { href: '/chatbots-ai', label: 'AI & Chatbots' },
     { href: '/internet-services', label: 'Internet Services' },
+    { href: '/premium-apps', label: 'Premium Apps' },
   ]
 
   return (

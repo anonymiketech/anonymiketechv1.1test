@@ -291,7 +291,7 @@ export default function PremiumAppsPage() {
           <div className="border-t border-green-500/30 pt-8 text-center text-xs sm:text-sm text-slate-400">
             <p>
               © {new Date().getFullYear()} Premium Apps Store. All rights reserved. | Powered by
-              Payflow
+              Anonymiketech-labs
             </p>
           </div>
         </div>

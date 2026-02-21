@@ -10,6 +10,7 @@ import CookieConsent from "@/components/CookieConsent"
 import ChatbotsPromoBanner from "@/components/ChatbotsPromoBanner"
 import ValentinePopup from "@/components/ValentinePopup"
 import WelcomeModal from "@/components/WelcomeModal"
+import PremiumAppsAnnouncement from "@/components/PremiumAppsAnnouncement"
 import { Toaster } from "@/components/ui/toaster"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -63,6 +64,7 @@ export default function RootLayout({
           <CookieConsent />
           <ChatbotsPromoBanner />
           <WelcomeModal />
+          <PremiumAppsAnnouncement />
           <Toaster />
         </CartProvider>
       </body>
