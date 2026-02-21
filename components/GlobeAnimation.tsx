@@ -4,6 +4,17 @@ import { useRef } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 
+// Suppress deprecation warning for THREE.Clock (using useFrame instead)
+if (typeof window !== "undefined") {
+  const originalWarn = console.warn
+  console.warn = function (...args: any[]) {
+    if (args[0]?.includes?.("Clock") && args[0]?.includes?.("deprecated")) {
+      return
+    }
+    originalWarn.apply(console, args)
+  }
+}
+
 function Globe() {
   const globeRef = useRef<THREE.Group>(null)
   const particlesRef = useRef<THREE.Points>(null)
