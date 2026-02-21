@@ -11,6 +11,7 @@ import PremiumAppPaymentModal from "@/components/PremiumAppPaymentModal"
 import MatrixRain from "@/components/MatrixRain"
 import MobileMenu from "@/components/MobileMenu"
 import BackToTop from "@/components/BackToTop"
+import DesktopNavbar from "@/components/DesktopNavbar"
 
 export default function PremiumAppsPage() {
   const [selectedApp, setSelectedApp] = useState<(typeof premiumApps)[0] | null>(null)
@@ -45,22 +46,10 @@ export default function PremiumAppsPage() {
     <main className="min-h-screen bg-black text-white overflow-hidden">
       <MatrixRain />
       <MobileMenu />
-
-      {/* Navigation */}
-      <nav className="relative z-40 border-b border-green-500/30 bg-black/80 backdrop-blur-md sticky top-0">
-        <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <Link href="/" className="text-green-400 hover:text-green-300 transition-colors">
-            <span className="font-mono text-sm sm:text-base">{"<"}/{">"}</span>
-          </Link>
-          <h1 className="text-lg sm:text-xl font-bold text-center flex-1 text-green-400 font-mono">
-            PREMIUM APPS STORE
-          </h1>
-          <div className="w-8 sm:w-auto"></div>
-        </div>
-      </nav>
+      <DesktopNavbar />
 
       {/* Hero Section */}
-      <section className="relative border-b border-green-500/30 py-12 sm:py-20">
+      <section className="relative border-b border-green-500/30 py-12 sm:py-20 pt-20 md:pt-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

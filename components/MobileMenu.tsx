@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Shield, Code, Bot, TrendingUp, Home, User, Mail, Heart, Settings } from "lucide-react"
+import { Menu, X, Shield, Code, Bot, TrendingUp, Home, User, Mail, Heart, Settings, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -87,6 +87,11 @@ export default function MobileMenu({ showAfterIntro = true }: MobileMenuProps) {
       name: "Portfolio",
       path: "/portfolio",
       icon: <User className="w-5 h-5" />,
+    },
+    {
+      name: "Premium Apps",
+      path: "/premium-apps",
+      icon: <ShoppingCart className="w-5 h-5" />,
     },
     {
       name: "Internet Services",
