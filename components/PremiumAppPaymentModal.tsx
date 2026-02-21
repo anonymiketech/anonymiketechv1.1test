@@ -30,8 +30,8 @@ export default function PremiumAppPaymentModal({
   const [validationError, setValidationError] = useState("")
 
   const validatePhoneNumber = (phoneNumber: string): boolean => {
-    // Accept Kenyan phone numbers in various formats
-    const phoneRegex = /^(\+?254|0)?[67]\d{8}$/
+    // Accept Kenyan phone numbers in various formats (01, 07, 06 prefixes)
+    const phoneRegex = /^(\+?254|0)?[1367]\d{8}$/
     return phoneRegex.test(phoneNumber.replace(/\s+/g, ""))
   }
 
