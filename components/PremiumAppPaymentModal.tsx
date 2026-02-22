@@ -68,6 +68,8 @@ export default function PremiumAppPaymentModal({
 
     try {
       const formattedPhone = formatPhoneForAPI(phone)
+      console.log("[v0] Initiating payment with phone:", formattedPhone, "amount:", price)
+      
       const response = await fetch("/api/premium-apps/initiate-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -79,20 +81,23 @@ export default function PremiumAppPaymentModal({
       })
 
       const data = await response.json()
+      console.log("[v0] Payment response:", { ok: response.ok, status: response.status, data })
 
       if (!response.ok) {
+        console.log("[v0] Payment initiation failed:", data.error)
         setError(data.error || "Failed to initiate payment. Please try again.")
         setStep("error")
       } else {
+        console.log("[v0] Payment initiated successfully, checkoutRequestId:", data.checkoutRequestId)
         setCheckoutRequestId(data.checkoutRequestId)
         setStep("pending")
         // Start polling for status after 3 seconds
         setTimeout(() => pollPaymentStatus(data.checkoutRequestId), 3000)
       }
     } catch (err) {
+      console.error("[v0] Payment initiation error:", err)
       setError("Network error. Please check your connection and try again.")
       setStep("error")
-      console.error("[v0] Payment initiation error:", err)
     } finally {
       setLoading(false)
     }
@@ -276,49 +281,112 @@ export default function PremiumAppPaymentModal({
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-6 text-center"
               >
-                <div className="flex justify-center py-4">
+                {/* Animated status indicator */}
+                <motion.div 
+                  className="flex justify-center py-6 relative"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
                   <motion.div
-                    animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+                    animate={{ rotate: 360, scale: [1, 1.15, 1] }}
                     transition={{ 
-                      rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-                      scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                      rotate: { duration: 2.5, repeat: Infinity, ease: "linear" },
+                      scale: { duration: 2.5, repeat: Infinity, ease: "easeInOut" }
                     }}
                   >
                     <div className="relative">
                       <motion.div
-                        animate={{ opacity: [0.3, 1, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute inset-0 bg-green-500 rounded-full blur-xl"
+                        animate={{ opacity: [0.2, 0.8, 0.2] }}
+                        transition={{ duration: 2.5, repeat: Infinity }}
+                        className="absolute inset-0 bg-green-500 rounded-full blur-2xl w-24 h-24"
                       />
-                      <Loader2 className="text-green-500 relative" size={56} />
+                      <motion.div
+                        animate={{ opacity: [0.1, 0.4, 0.1] }}
+                        transition={{ duration: 2.5, repeat: Infinity, delay: 0.3 }}
+                        className="absolute inset-0 bg-emerald-400 rounded-full blur-3xl w-28 h-28"
+                      />
+                      <Loader2 className="text-green-400 relative z-10" size={64} strokeWidth={1.5} />
                     </div>
                   </motion.div>
-                </div>
-                <div className="space-y-3">
-                  <motion.p 
-                    className="text-green-400 font-mono text-lg font-bold"
-                    animate={{ opacity: [0.8, 1, 0.8] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                </motion.div>
+
+                {/* Status messages */}
+                <div className="space-y-4">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-2"
                   >
-                    Waiting for payment confirmation...
-                  </motion.p>
-                  <p className="text-sm text-slate-400">
-                    Please complete the M-Pesa STK prompt on your phone
-                  </p>
+                    <motion.p 
+                      className="text-green-300 font-mono text-xl font-bold tracking-wide"
+                      animate={{ opacity: [0.7, 1, 0.7] }}
+                      transition={{ duration: 2.5, repeat: Infinity }}
+                    >
+                      Payment Processing...
+                    </motion.p>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      Complete the M-Pesa STK prompt on your phone to confirm payment
+                    </p>
+                  </motion.div>
+
+                  {/* Animated divider */}
+                  <motion.div
+                    animate={{ opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="h-px bg-gradient-to-r from-transparent via-green-500/50 to-transparent my-2"
+                  />
+
+                  {/* Instructions */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-xs text-slate-400 space-y-1"
+                  >
+                    <p>• Check your phone for the M-Pesa popup</p>
+                    <p>• Enter your M-Pesa PIN to confirm</p>
+                    <p>• This window will update automatically</p>
+                  </motion.div>
+
+                  {/* Animated indicator */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="text-xs text-slate-500 pt-2"
+                    className="pt-3"
                   >
                     <motion.div
-                      animate={{ y: [0, 2, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
+                      animate={{ y: [0, 3, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="text-xs text-slate-500 font-mono"
                     >
                       ↓ Do not close this window ↓
                     </motion.div>
                   </motion.div>
                 </div>
+
+                {/* WhatsApp Contact Button - for sharing status */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="space-y-2 pt-2"
+                >
+                  <button
+                    onClick={() => {
+                      const whatsappMessage = `Hi, I'm currently making a payment for ${appName}. Amount: KSH ${price}. Please assist if needed.`
+                      const whatsappUrl = `https://wa.me/254782829321?text=${encodeURIComponent(whatsappMessage)}`
+                      window.open(whatsappUrl, "_blank")
+                    }}
+                    className="w-full rounded border border-blue-500/50 bg-blue-500/10 px-4 py-2.5 font-mono text-sm text-blue-300 hover:bg-blue-500/20 transition-all hover:border-blue-400 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-blue-500/20"
+                  >
+                    <MessageCircle size={16} />
+                    Contact Support on WhatsApp
+                  </button>
+                  <p className="text-xs text-slate-500">Need help? Chat with us on WhatsApp</p>
+                </motion.div>
               </motion.div>
             )}
 
@@ -393,92 +461,192 @@ export default function PremiumAppPaymentModal({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="space-y-6 text-center"
+                transition={{ duration: 0.5 }}
+                className="space-y-6 text-center relative"
               >
-                {/* Confetti-like animation elements */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {[...Array(6)].map((_, i) => (
+                {/* Animated background glow */}
+                <motion.div
+                  animate={{ opacity: [0.1, 0.3, 0.1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute inset-0 bg-gradient-to-t from-green-500/20 via-transparent to-transparent rounded-lg blur-xl"
+                />
+
+                {/* Confetti-like celebration animation */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
+                  {[...Array(12)].map((_, i) => (
                     <motion.div
                       key={i}
-                      initial={{ opacity: 0, y: 0 }}
-                      animate={{ opacity: [1, 0], y: [-20, -100] }}
-                      transition={{ duration: 2, delay: i * 0.1 }}
-                      className="absolute text-green-400 text-2xl"
-                      style={{ left: `${20 + i * 15}%` }}
+                      initial={{ 
+                        opacity: 0, 
+                        y: 0,
+                        x: 0,
+                        rotate: Math.random() * 360
+                      }}
+                      animate={{ 
+                        opacity: [1, 0], 
+                        y: [-30, -120],
+                        x: (Math.random() - 0.5) * 40,
+                        rotate: Math.random() * 720
+                      }}
+                      transition={{ 
+                        duration: 2.5, 
+                        delay: i * 0.08,
+                        ease: "easeOut"
+                      }}
+                      className="absolute text-green-400 text-2xl font-bold"
+                      style={{ 
+                        left: `${15 + (i % 3) * 25}%`,
+                        top: "10%"
+                      }}
                     >
-                      ✓
+                      {['✓', '★', '◆'][i % 3]}
                     </motion.div>
                   ))}
                 </div>
 
-                <div className="flex justify-center py-4">
+                {/* Success icon with enhanced animation */}
+                <motion.div 
+                  className="flex justify-center py-6 relative z-10"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6, type: "spring", stiffness: 100 }}
+                >
                   <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ type: "spring", stiffness: 100, damping: 10 }}
+                    animate={{ 
+                      scale: [1, 1.2, 1],
+                      rotateZ: [0, 5, -5, 0]
+                    }}
+                    transition={{ 
+                      duration: 0.6,
+                      delay: 0.3
+                    }}
                   >
                     <div className="relative">
                       <motion.div
-                        animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.1, 1] }}
+                        animate={{ 
+                          opacity: [0.4, 0.8, 0.4],
+                          scale: [1, 1.2, 1]
+                        }}
                         transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute inset-0 bg-green-500 rounded-full blur-2xl"
+                        className="absolute inset-0 bg-green-500 rounded-full blur-2xl w-32 h-32"
                       />
-                      <CheckCircle className="text-green-400 relative" size={80} strokeWidth={1.5} />
+                      <motion.div
+                        animate={{ 
+                          opacity: [0.2, 0.5, 0.2],
+                          scale: [1, 1.15, 1]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity, delay: 0.2 }}
+                        className="absolute inset-0 bg-emerald-400 rounded-full blur-3xl w-36 h-36"
+                      />
+                      <CheckCircle className="text-green-300 relative z-10" size={96} strokeWidth={1} />
                     </div>
                   </motion.div>
-                </div>
+                </motion.div>
 
+                {/* Success content */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                  className="space-y-3 relative z-10"
+                  transition={{ delay: 0.4 }}
+                  className="space-y-4 relative z-10"
                 >
-                  <motion.h3
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-2xl font-bold text-green-400 mb-2"
-                  >
-                    Purchase Successful!
-                  </motion.h3>
-                  <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="text-base text-slate-300 mb-3"
-                  >
-                    {appName} is now available for download
-                  </motion.p>
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                    className="rounded-lg bg-green-500/10 border border-green-500/30 p-3"
+                    transition={{ delay: 0.5 }}
+                    className="space-y-1"
                   >
-                    <p className="text-sm text-green-400 font-mono">
-                      Transaction Verified ✓
+                    <motion.h3
+                      animate={{ letterSpacing: "0.05em" }}
+                      transition={{ delay: 0.5 }}
+                      className="text-3xl font-bold text-green-300 tracking-wide"
+                    >
+                      Payment Confirmed!
+                    </motion.h3>
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                      className="text-base text-emerald-200 font-mono"
+                    >
+                      Transaction Verified & Processed
+                    </motion.p>
+                  </motion.div>
+
+                  {/* App details box */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7 }}
+                    className="rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/40 p-4 space-y-2"
+                  >
+                    <p className="text-sm text-green-300 font-mono">
+                      App: <span className="font-bold text-green-200">{appName}</span>
+                    </p>
+                    <p className="text-sm text-green-300 font-mono">
+                      Amount: <span className="font-bold text-green-200">KSH {price}</span>
+                    </p>
+                    <p className="text-xs text-slate-400 pt-2 flex items-center justify-center gap-2">
+                      <span className="text-green-400">✓</span>
+                      Ready for Download
+                    </p>
+                  </motion.div>
+
+                  {/* Additional info */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
+                    className="text-xs text-slate-400 space-y-1 bg-slate-800/50 rounded-lg p-3 border border-slate-700/50"
+                  >
+                    <p className="flex items-center gap-2">
+                      <span className="text-blue-400">→</span> Check your email for download link
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-blue-400">→</span> Download link valid for 30 days
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-blue-400">→</span> Need help? Contact us on WhatsApp
                     </p>
                   </motion.div>
                 </motion.div>
 
-                <motion.button
-                  initial={{ opacity: 0, y: 10 }}
+                {/* Action buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                  onClick={handleClose}
-                  className="w-full rounded border border-green-500 bg-gradient-to-r from-green-500/20 to-emerald-500/20 px-4 py-3 font-mono font-bold text-green-400 hover:from-green-500/30 hover:to-emerald-500/30 transition-all hover:shadow-lg hover:shadow-green-500/50"
+                  transition={{ delay: 0.9 }}
+                  className="space-y-3 relative z-10 pt-2"
                 >
-                  Download Now
-                </motion.button>
+                  <button
+                    onClick={handleClose}
+                    className="w-full rounded-lg border border-green-500/50 bg-gradient-to-r from-green-500/20 to-emerald-500/20 px-4 py-3 font-mono font-bold text-green-300 hover:from-green-500/30 hover:to-emerald-500/30 transition-all hover:shadow-lg hover:shadow-green-500/40 hover:border-green-400"
+                  >
+                    Download & Continue
+                  </button>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      const whatsappMessage = `Hi, I just successfully purchased ${appName} for KSH ${price}. Thank you!`
+                      const whatsappUrl = `https://wa.me/254782829321?text=${encodeURIComponent(whatsappMessage)}`
+                      window.open(whatsappUrl, "_blank")
+                    }}
+                    className="w-full rounded-lg border border-blue-500/40 bg-blue-500/10 px-4 py-2.5 font-mono text-sm text-blue-300 hover:bg-blue-500/20 transition-all hover:border-blue-400 flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle size={16} />
+                    Share Success on WhatsApp
+                  </motion.button>
+                </motion.div>
 
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="text-xs text-slate-500"
+                  transition={{ delay: 1 }}
+                  className="text-xs text-slate-500 relative z-10"
                 >
-                  Check your email for download instructions
+                  Thank you for your purchase! Enjoy your premium app.
                 </motion.p>
               </motion.div>
             )}

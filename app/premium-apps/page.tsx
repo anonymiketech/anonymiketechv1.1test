@@ -63,10 +63,10 @@ export default function PremiumAppsPage() {
               <Zap className="text-green-400" size={24} />
             </div>
             <h2 className="mb-4 text-3xl sm:text-5xl font-bold text-green-400 font-mono">
-              Professional Developer Tools
+              Professional Developer Apps
             </h2>
             <p className="mb-6 max-w-2xl text-base sm:text-lg text-slate-300 mx-auto">
-              Unlock powerful applications designed for developers. Securely purchase with M-Pesa
+              Unlock powerful applications designed for Everyone. Securely purchase with M-Pesa
               for just KSH 100 each.
             </p>
 
@@ -275,14 +275,6 @@ export default function PremiumAppsPage() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="https://payflow.top/api-doc.php"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    API Docs
-                  </a>
                 </li>
               </ul>
             </div>
