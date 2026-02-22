@@ -275,14 +275,6 @@ export default function PremiumAppsPage() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="https://payflow.top/api-doc.php"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    API Docs
-                  </a>
                 </li>
               </ul>
             </div>
