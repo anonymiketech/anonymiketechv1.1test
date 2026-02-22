@@ -68,6 +68,8 @@ export default function PremiumAppPaymentModal({
 
     try {
       const formattedPhone = formatPhoneForAPI(phone)
+      console.log("[v0] Initiating payment with phone:", formattedPhone, "amount:", price)
+      
       const response = await fetch("/api/premium-apps/initiate-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -79,20 +81,23 @@ export default function PremiumAppPaymentModal({
       })
 
       const data = await response.json()
+      console.log("[v0] Payment response:", { ok: response.ok, status: response.status, data })
 
       if (!response.ok) {
+        console.log("[v0] Payment initiation failed:", data.error)
         setError(data.error || "Failed to initiate payment. Please try again.")
         setStep("error")
       } else {
+        console.log("[v0] Payment initiated successfully, checkoutRequestId:", data.checkoutRequestId)
         setCheckoutRequestId(data.checkoutRequestId)
         setStep("pending")
         // Start polling for status after 3 seconds
         setTimeout(() => pollPaymentStatus(data.checkoutRequestId), 3000)
       }
     } catch (err) {
+      console.error("[v0] Payment initiation error:", err)
       setError("Network error. Please check your connection and try again.")
       setStep("error")
-      console.error("[v0] Payment initiation error:", err)
     } finally {
       setLoading(false)
     }
