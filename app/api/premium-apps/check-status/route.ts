@@ -55,7 +55,41 @@ export async function POST(request: Request) {
       body: JSON.stringify(payload),
     })
 
-    const data: PayflowStatusResponse = await response.json()
+    // Try to parse JSON response, but handle non-JSON responses gracefully
+    let data: PayflowStatusResponse
+    const contentType = response.headers.get('content-type')
+    
+    try {
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json()
+      } else {
+        // If response is not JSON, read as text
+        const text = await response.text()
+        console.error('[v0] Non-JSON response from Payflow:', { 
+          status: response.status, 
+          contentType,
+          textSnippet: text.substring(0, 100) 
+        })
+        // Treat non-JSON responses as still pending
+        return NextResponse.json(
+          {
+            status: 'pending',
+            message: 'Payment service is processing your request',
+          },
+          { status: 200 }
+        )
+      }
+    } catch (parseError) {
+      console.error('[v0] Failed to parse Payflow response:', parseError)
+      // If we can't parse the response, assume it's still pending
+      return NextResponse.json(
+        {
+          status: 'pending',
+          message: 'Payment service is processing your request',
+        },
+        { status: 200 }
+      )
+    }
 
     if (!response.ok) {
       console.error('[v0] Payflow status check error:', data)
