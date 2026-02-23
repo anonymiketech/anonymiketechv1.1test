@@ -1,12 +1,197 @@
 'use client'
 
 import React from "react"
-
+import { useForm, ValidationError } from '@formspree/react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, Github, Linkedin } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Github, Linkedin, CheckCircle } from 'lucide-react'
 import BackToTop from '@/components/BackToTop'
 import ContactButtons from '@/components/ContactButtons'
 import ChatbaseEmbed from '@/components/ChatbaseEmbed'
+
+function ContactForm() {
+  const [state, handleSubmit] = useForm("mykdbpzy")
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Name Field */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        viewport={{ once: true }}
+      >
+        <label htmlFor="name" className="block text-hacker-green font-tech font-semibold mb-2">
+          Full Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          placeholder="Your name"
+          className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
+        />
+        <ValidationError 
+          prefix="Name" 
+          field="name"
+          errors={state.errors}
+          className="text-red-400 text-sm mt-1"
+        />
+      </motion.div>
+
+      {/* Email Field */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+        viewport={{ once: true }}
+      >
+        <label htmlFor="email" className="block text-hacker-green font-tech font-semibold mb-2">
+          Email Address
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="your.email@example.com"
+          className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
+        />
+        <ValidationError 
+          prefix="Email" 
+          field="email"
+          errors={state.errors}
+          className="text-red-400 text-sm mt-1"
+        />
+      </motion.div>
+
+      {/* Phone Field */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        viewport={{ once: true }}
+      >
+        <label htmlFor="phone" className="block text-hacker-green font-tech font-semibold mb-2">
+          Phone Number
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="+1 (555) 000-0000"
+          className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
+        />
+        <ValidationError 
+          prefix="Phone" 
+          field="phone"
+          errors={state.errors}
+          className="text-red-400 text-sm mt-1"
+        />
+      </motion.div>
+
+      {/* Subject Field */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.25 }}
+        viewport={{ once: true }}
+      >
+        <label htmlFor="subject" className="block text-hacker-green font-tech font-semibold mb-2">
+          Subject
+        </label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          required
+          placeholder="Project inquiry, consultation, etc."
+          className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
+        />
+        <ValidationError 
+          prefix="Subject" 
+          field="subject"
+          errors={state.errors}
+          className="text-red-400 text-sm mt-1"
+        />
+      </motion.div>
+
+      {/* Message Field */}
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        viewport={{ once: true }}
+      >
+        <label htmlFor="message" className="block text-hacker-green font-tech font-semibold mb-2">
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          placeholder="Tell us about your project or inquiry..."
+          rows={6}
+          className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all resize-none"
+        />
+        <ValidationError 
+          prefix="Message" 
+          field="message"
+          errors={state.errors}
+          className="text-red-400 text-sm mt-1"
+        />
+      </motion.div>
+
+      {/* Submit Button */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.35 }}
+        viewport={{ once: true }}
+        className="pt-4"
+      >
+        <motion.button
+          type="submit"
+          disabled={state.submitting}
+          whileHover={!state.submitting ? { scale: 1.05, boxShadow: '0 0 30px rgba(0, 255, 0, 0.5)' } : {}}
+          whileTap={!state.submitting ? { scale: 0.95 } : {}}
+          className="w-full px-8 py-4 rounded-lg bg-gradient-to-r from-hacker-green to-emerald-400 text-hacker-terminal font-tech font-bold text-lg hover:shadow-lg hover:shadow-hacker-green/50 transition-all border-2 border-transparent hover:border-hacker-green disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span className="flex items-center justify-center gap-2">
+            <Send className="w-5 h-5" />
+            {state.submitting ? 'Sending...' : 'Send Message'}
+          </span>
+        </motion.button>
+      </motion.div>
+
+      {/* Success Message */}
+      {state.succeeded && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-lg bg-green-500/20 border-2 border-green-500/50 p-4 flex items-center gap-3"
+        >
+          <CheckCircle className="w-6 h-6 text-green-400" />
+          <div>
+            <p className="text-green-300 font-tech font-semibold">Message sent successfully!</p>
+            <p className="text-green-200 text-sm">We&apos;ll get back to you as soon as possible.</p>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Form Note */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+        viewport={{ once: true }}
+        className="text-center text-hacker-green-dim text-sm font-tech"
+      >
+        We&apos;ll get back to you as soon as possible. Typically within 24 hours.
+      </motion.p>
+    </form>
+  )
+}
 
 export default function ContactPage() {
   const containerVariants = {
@@ -58,28 +243,6 @@ export default function ContactPage() {
       color: 'from-emerald-500 to-green-500',
     },
   ]
-
-  const [formData, setFormData] = React.useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-  })
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // Formspree integration will be added here
-    console.log('Form data:', formData)
-  }
 
   const socialLinks = [
     {
@@ -216,148 +379,7 @@ export default function ContactPage() {
         </motion.h2>
 
         <div className="max-w-2xl mx-auto rounded-2xl border-2 border-hacker-green/40 bg-gradient-to-br from-hacker-terminal via-slate-950 to-hacker-terminal/80 p-12 backdrop-blur-sm overflow-hidden">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <label htmlFor="name" className="block text-hacker-green font-tech font-semibold mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                placeholder="Your name"
-                className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
-              />
-            </motion.div>
-
-            {/* Email Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              viewport={{ once: true }}
-            >
-              <label htmlFor="email" className="block text-hacker-green font-tech font-semibold mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                placeholder="your.email@example.com"
-                className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
-              />
-            </motion.div>
-
-            {/* Phone Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <label htmlFor="phone" className="block text-hacker-green font-tech font-semibold mb-2">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="+1 (555) 000-0000"
-                className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
-              />
-            </motion.div>
-
-            {/* Subject Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              viewport={{ once: true }}
-            >
-              <label htmlFor="subject" className="block text-hacker-green font-tech font-semibold mb-2">
-                Subject
-              </label>
-              <input
-                type="text"
-                id="subject"
-                name="subject"
-                value={formData.subject}
-                onChange={handleInputChange}
-                required
-                placeholder="Project inquiry, consultation, etc."
-                className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all"
-              />
-            </motion.div>
-
-            {/* Message Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <label htmlFor="message" className="block text-hacker-green font-tech font-semibold mb-2">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                required
-                placeholder="Tell us about your project or inquiry..."
-                rows={6}
-                className="w-full px-4 py-3 rounded-lg bg-slate-900/50 border-2 border-hacker-green/30 text-white placeholder-hacker-green-dim font-tech focus:outline-none focus:border-hacker-green focus:ring-2 focus:ring-hacker-green/30 transition-all resize-none"
-              />
-            </motion.div>
-
-            {/* Submit Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              viewport={{ once: true }}
-              className="pt-4"
-            >
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(0, 255, 0, 0.5)' }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full px-8 py-4 rounded-lg bg-gradient-to-r from-hacker-green to-emerald-400 text-hacker-terminal font-tech font-bold text-lg hover:shadow-lg hover:shadow-hacker-green/50 transition-all border-2 border-transparent hover:border-hacker-green"
-              >
-                <span className="flex items-center justify-center gap-2">
-                  <Send className="w-5 h-5" />
-                  Send Message
-                </span>
-              </motion.button>
-            </motion.div>
-
-            {/* Form Note */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="text-center text-hacker-green-dim text-sm font-tech mt-6"
-            >
-              We&apos;ll get back to you as soon as possible. Typically within 24 hours.
-            </motion.p>
-          </form>
+          <ContactForm />
         </div>
       </motion.section>
 

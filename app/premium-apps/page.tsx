@@ -63,7 +63,7 @@ export default function PremiumAppsPage() {
               <Zap className="text-green-400" size={24} />
             </div>
             <h2 className="mb-4 text-3xl sm:text-5xl font-bold text-green-400 font-mono">
-              Professional Developer Apps
+              Professional Premium Apps
             </h2>
             <p className="mb-6 max-w-2xl text-base sm:text-lg text-slate-300 mx-auto">
               Unlock powerful applications designed for Everyone. Securely purchase with M-Pesa
