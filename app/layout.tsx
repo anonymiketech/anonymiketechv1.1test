@@ -94,6 +94,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="canonical" href="https://anonymiketech.com" />
+        <meta name="google-site-verification" content="RXEq3eYoTzFZAXaL9QlMkQ8NvfemjL4wHW5g5JXesHk" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
