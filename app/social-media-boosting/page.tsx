@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { TrendingUp, Bell, Plus } from "lucide-react"
+import { TrendingUp, Bell, Plus, Settings } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import MatrixRain from "@/components/MatrixRain"
 import ServiceHero from "@/components/ServiceHero"
 import ContactButtons from "@/components/ContactButtons"
@@ -10,6 +11,7 @@ import MobileMenu from "@/components/MobileMenu"
 import BackToTop from "@/components/BackToTop"
 import SocialMediaNetworkList, { type NetworkItem } from "@/components/SocialMediaNetworkList"
 import YouTubeServices from "@/components/YouTubeServices"
+import DynamicSocialServices from "@/components/DynamicSocialServices"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { getCurrentYear } from "@/utils/getCurrentYear"
@@ -66,6 +68,21 @@ export default function SocialMediaBoosting() {
       <MatrixRain />
 
       <div className="relative z-10">
+        {/* Admin Access Link */}
+        <div className="fixed top-4 right-4 z-50">
+          <Link href="/admin?tab=services">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-hacker-green/20 border border-hacker-green text-hacker-green-bright hover:bg-hacker-green/30 transition-all text-sm"
+              title="Admin Panel - Services Management"
+            >
+              <Settings className="w-4 h-4" />
+              <span className="hidden sm:inline">Admin</span>
+            </motion.button>
+          </Link>
+        </div>
+
         <ServiceHero
           title="SOCIAL MEDIA BOOSTING"
           subtitle="// Select Your Network"
@@ -222,10 +239,7 @@ export default function SocialMediaBoosting() {
               </motion.div>
             ) : (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-                <h2 className="text-2xl md:text-3xl font-tech font-bold text-hacker-green-bright mb-8 glow-text">
-                  Select network
-                </h2>
-                <SocialMediaNetworkList networks={filteredNetworks} onNetworkSelect={handleNetworkSelect} />
+                <DynamicSocialServices />
               </motion.div>
             )}
           </div>

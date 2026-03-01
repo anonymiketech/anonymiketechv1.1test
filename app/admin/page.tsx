@@ -29,6 +29,9 @@ import Link from "next/link"
 import MatrixRain from "@/components/MatrixRain"
 import MobileMenu from "@/components/MobileMenu"
 import BackToTop from "@/components/BackToTop"
+import AdminServicesPanel from "@/components/AdminServicesPanel"
+import AdminSidebar from "@/components/AdminSidebar"
+import AdminImageUpload from "@/components/AdminImageUpload"
 
 interface Order {
   id: number
@@ -61,7 +64,7 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
-  const [activeTab, setActiveTab] = useState<"all" | "website" | "social-media">("all")
+  const [activeTab, setActiveTab] = useState<"all" | "website" | "social-media" | "services">("all")
   // Password change state
   const [showPasswordChange, setShowPasswordChange] = useState(false)
   const [currentPw, setCurrentPw] = useState("")
@@ -247,67 +250,56 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative flex lg:flex-row flex-col">
       <MobileMenu />
       <BackToTop />
       <MatrixRain />
 
-      <div className="relative z-10 container mx-auto px-4 py-16">
+      {/* Sidebar */}
+      <AdminSidebar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab}
+        onLogout={() => setIsAuthenticated(false)}
+      />
+
+      <div className="flex-1 relative z-10 w-full lg:pt-0 pt-16">
+        <div className="container mx-auto px-4 py-8 lg:py-16">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-between mb-8"
+            className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
           >
             <div>
-              <h1 className="text-6xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                Admin Dashboard
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                Dashboard
               </h1>
-              <p className="text-slate-400 flex items-center gap-2 text-lg">
-                <Activity className="w-5 h-5 text-emerald-400" />
-                Real-time Order Management System
+              <p className="text-slate-400 flex items-center gap-2 text-sm md:text-base">
+                <Activity className="w-4 w-4 md:w-5 md:h-5 text-emerald-400" />
+                Real-time Order Management
               </p>
             </div>
-            <div className="flex flex-wrap gap-3 items-center">
-              <Link href="/admin/valentine-tokens">
+            <div className="flex flex-wrap gap-2 md:gap-3 items-center w-full md:w-auto">
+              <Link href="/admin/services">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-400 font-bold hover:bg-rose-500/30 transition-all"
+                  className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-3 rounded-lg md:rounded-xl text-xs md:text-sm bg-cyan-500/20 border border-cyan-500/50 text-cyan-400 font-bold hover:bg-cyan-500/30 transition-all"
                 >
-                  <Heart className="w-4 h-4" />
-                  Valentine Tokens
-                </motion.button>
-              </Link>
-              <Link href="/admin/valentine-validation">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-pink-500/20 border border-pink-500/50 text-pink-400 font-bold hover:bg-pink-500/30 transition-all"
-                >
-                  <LinkIcon className="w-4 h-4" />
-                  Validation
+                  <Package className="w-4 h-4" />
+                  <span className="hidden sm:inline">Services</span>
                 </motion.button>
               </Link>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowPasswordChange(!showPasswordChange)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl border font-bold transition-all ${showPasswordChange ? "bg-amber-500/30 border-amber-500/60 text-amber-300" : "bg-amber-500/20 border-amber-500/50 text-amber-400 hover:bg-amber-500/30"}`}
+                className={`flex items-center gap-2 px-3 md:px-5 py-2 md:py-3 rounded-lg md:rounded-xl text-xs md:text-sm border font-bold transition-all ${showPasswordChange ? "bg-amber-500/30 border-amber-500/60 text-amber-300" : "bg-amber-500/20 border-amber-500/50 text-amber-400 hover:bg-amber-500/30"}`}
               >
                 <Settings className="w-4 h-4" />
-                Settings
+                <span className="hidden sm:inline">Settings</span>
               </motion.button>
-              <Link href="/">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 transition-all"
-                >
-                  Back to Home
-                </motion.button>
-              </Link>
             </div>
           </motion.div>
 
@@ -320,16 +312,23 @@ export default function AdminDashboard() {
                 exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                 className="overflow-hidden"
               >
-                <div className="bg-slate-900/80 border-2 border-amber-500/30 rounded-2xl p-6 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                      <Lock className="w-5 h-5 text-amber-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white">Change Admin Password</h3>
-                      <p className="text-slate-400 text-sm">This will update the password for all admin pages</p>
-                    </div>
+                <div className="bg-slate-900/80 border-2 border-amber-500/30 rounded-2xl p-6 backdrop-blur-sm space-y-8">
+                  {/* Admin Image Upload Section */}
+                  <div className="pb-6 border-b border-slate-700">
+                    <AdminImageUpload />
                   </div>
+
+                  {/* Password Change Section */}
+                  <div>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                        <Lock className="w-5 h-5 text-amber-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white">Change Admin Password</h3>
+                        <p className="text-slate-400 text-sm">This will update the password for all admin pages</p>
+                      </div>
+                    </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                       <label className="block text-slate-400 text-sm mb-1">Current Password</label>
@@ -378,6 +377,7 @@ export default function AdminDashboard() {
                       </p>
                     )}
                   </div>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -388,6 +388,7 @@ export default function AdminDashboard() {
               { id: "all", label: "All Orders", icon: BarChart3 },
               { id: "website", label: "Website Development", icon: Globe },
               { id: "social-media", label: "Social Media Boosting", icon: Share2 },
+              { id: "services", label: "Services Management", icon: Package },
             ].map((tab) => {
               const Icon = tab.icon
               return (
@@ -730,12 +731,29 @@ export default function AdminDashboard() {
           )}
         </AnimatePresence>
 
+        {/* Services Management Tab */}
+        <AnimatePresence mode="wait">
+          {activeTab === "services" && (
+            <motion.div
+              key="services"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-slate-900/50 border border-slate-700 rounded-2xl p-8 backdrop-blur-sm mt-8"
+            >
+              <AdminServicesPanel />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Footer */}
         <motion.footer className="py-8 border-t border-slate-800 mt-16">
           <div className="text-center">
             <p className="text-slate-400">© anonymiketech_inc@{getCurrentYear()} - Admin Dashboard v2.0</p>
           </div>
         </motion.footer>
+        </div>
       </div>
     </div>
   )

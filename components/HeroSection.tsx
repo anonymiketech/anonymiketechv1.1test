@@ -81,15 +81,15 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* Main content grid */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center pt-20 md:pt-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 container mx-auto px-4 md:px-6 py-8 md:py-0">
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex relative z-10 w-full h-full items-center justify-center pt-20 md:pt-0">
+        <div className="grid grid-cols-2 gap-6 md:gap-8 lg:gap-12 container mx-auto px-4 md:px-6 py-8 md:py-0 h-full items-center">
           {/* Left side - Text content */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="flex flex-col justify-center items-start order-2 lg:order-1 py-8 md:py-0"
+            className="flex flex-col justify-center items-start"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -153,7 +153,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="flex items-center justify-center h-64 xs:h-72 sm:h-80 md:h-full min-h-64 order-1 lg:order-2"
+            className="flex items-center justify-center h-full min-h-96"
           >
             <Suspense
               fallback={
@@ -162,6 +162,84 @@ export default function HeroSection() {
             >
               <GlobeAnimation />
             </Suspense>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Mobile Layout - Overlay */}
+      <div className="lg:hidden relative z-10 w-full h-full flex items-center justify-center pt-20">
+        {/* Globe background */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.8 }}
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          <Suspense
+            fallback={
+              <div className="text-cyan-400 animate-pulse text-xs md:text-base">Loading 3D Globe...</div>
+            }
+          >
+            <GlobeAnimation />
+          </Suspense>
+        </motion.div>
+
+        {/* Text content overlay */}
+        <div className="relative z-20 w-full container mx-auto px-4 py-8 flex flex-col justify-center items-start h-screen">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="mb-4"
+          >
+            <span className="inline-block px-3 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-tech">
+              // Connected Security
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-3xl xs:text-3.5xl sm:text-4xl font-tech font-bold mb-6 text-balance leading-tight bg-gradient-to-r from-cyan-400 via-cyan-300 to-cyan-200 bg-clip-text text-transparent"
+          >
+            ANONYMIKETECH
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-sm sm:text-base text-cyan-300/80 mb-6 font-tech text-balance max-w-md"
+          >
+            // Unleashing Digital Innovation & Cyber Excellence
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-xs sm:text-sm text-gray-400 mb-6 max-w-md leading-relaxed"
+          >
+            Experience cutting-edge technology solutions with global reach and uncompromising security. Connect to our innovation lab and explore the future of digital transformation.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="flex gap-3 flex-wrap"
+          >
+            <a href="/contact">
+              <button className="px-4 py-2 rounded-lg font-tech font-bold text-xs sm:text-sm text-hacker-terminal bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 hover:shadow-lg hover:shadow-cyan-500/50 transition-all border-2 border-transparent hover:border-cyan-400">
+                Get Started
+              </button>
+            </a>
+            <a href="#services">
+              <button className="px-4 py-2 rounded-lg font-tech font-bold text-xs sm:text-sm text-cyan-400 border-2 border-cyan-400/50 hover:border-cyan-400 hover:bg-cyan-400/5 transition-all">
+                Explore Services
+              </button>
+            </a>
           </motion.div>
         </div>
       </div>

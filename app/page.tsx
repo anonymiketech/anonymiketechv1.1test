@@ -169,6 +169,43 @@ export default function Home() {
 
           {showContent && <TestimonialsSection />}
 
+          {/* Premium Apps CTA */}
+          <motion.section
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: showContent ? 1 : 0, y: showContent ? 0 : 50 }}
+            transition={{ delay: 4, duration: 1 }}
+            className="container mx-auto px-4 mb-16"
+          >
+            <a href="/premium-apps">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="glow-border rounded-lg p-8 bg-gradient-to-r from-green-500/10 to-emerald-600/10 backdrop-blur-sm cursor-pointer border border-hacker-green/50 hover:border-hacker-green transition-all"
+              >
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="flex-1">
+                    <h3 className="text-3xl md:text-4xl font-tech font-bold text-hacker-green mb-3">
+                      // PREMIUM APPS STORE
+                    </h3>
+                    <p className="text-hacker-green-dim text-lg mb-2">
+                      Professional developer tools at just KSH 100 each
+                    </p>
+                    <p className="text-hacker-green-dim">
+                      Secure M-Pesa payments • Instant access • 30-day money-back guarantee
+                    </p>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-3 rounded-lg font-tech font-bold text-hacker-terminal bg-gradient-to-r from-hacker-green to-emerald-400 hover:shadow-lg hover:shadow-hacker-green/50 transition-all whitespace-nowrap"
+                  >
+                    Shop Now →
+                  </motion.button>
+                </div>
+              </motion.div>
+            </a>
+          </motion.section>
+
           <motion.section
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: showContent ? 1 : 0, y: showContent ? 0 : 50 }}
